@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         message.setOnClickListener(View.OnClickListener { v ->
-            val intent = Intent(this, YouTube::class.java)
-            intent.putExtra("VIDEO", "Lish5QFp81E")
+            val intent = Intent(this, ArticleActivity::class.java)
             startActivityForResult(intent, 1)
         })
     }
