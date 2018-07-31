@@ -3,18 +3,10 @@ package com.rsg.SciSearch
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_article.*
 import com.rsg.SciSearch.utils.ThumbnailLayout
-import android.graphics.drawable.Drawable
-import android.os.Handler
-import android.os.Message
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.rsg.SciSearch.utils.Sizes
-import java.io.IOException
-import java.io.InputStream
-import java.net.URL
 
 
 class ArticleActivity : AppCompatActivity() {
@@ -29,18 +21,18 @@ class ArticleActivity : AppCompatActivity() {
 
         val loadingImageText = TextView(this)
         loadingImageText.text = "Hello, Please wait until loading"
-        articleLayout.addView(loadingImageText)
+        articleContent.addView(loadingImageText)
 
-//        videos.forEach { videoId ->
-//            val option = ImageView(this)
+        videos.forEach { videoId ->
+            //            val option = ImageView(this)
 //            option.setOnClickListener { clickCallback(videoId) }
 //
-        val option = ThumbnailLayout(this).createLayout(videos[0])
+            val option = ThumbnailLayout(this).createLayout(videoId)
 
-        articleLayout.addView(option)
-//        }
+            articleContent.addView(option)
+        }
 
-//        articleLayout.invalidate()
+        articleContent.invalidate()
     }
 
     fun clickCallback(video: String) {

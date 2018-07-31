@@ -32,8 +32,8 @@ class Sizes(private val context: Context) {
 
     val videoWidth: Int = if (screen.x < screen.y) (screen.x / 1.15).roundToInt() else (screen.x / 1.2).roundToInt()
     val videoHeight: Int = (videoWidth / 1.8).roundToInt()
-    val thumbWidth: Int = if (screen.x < screen.y) (screen.x / 1.07).roundToInt() else (screen.x / 1.15).roundToInt()
-    val thumbHeight: Int = (thumbWidth / 1.33).roundToInt()
+    val thumbWidth: Int = if (screen.x < screen.y) (screen.x / 1.1).roundToInt() else (screen.x / 1.15).roundToInt()
+    val thumbHeight: Int = (thumbWidth / 1.775).roundToInt()
 }
 
 class ThumbnailLayout(private val context: Context) {
@@ -47,8 +47,8 @@ class ThumbnailLayout(private val context: Context) {
         val image = ImageView(context)
         image.layoutParams = optionSizes
 
-        image.background = ColorDrawable(Color.RED)
-        loadRemoteThumbnail("https://img.youtube.com/vi/$videoId/sddefault.jpg", image)
+        image.background = ColorDrawable(Color.rgb(220, 220, 220))
+        loadRemoteThumbnail("https://img.youtube.com/vi/$videoId/mqdefault.jpg", image)
         image.id = R.id.thumbImage
         relativeLayout.addView(image)
 
@@ -60,7 +60,7 @@ class ThumbnailLayout(private val context: Context) {
         return relativeLayout
     }
 
-    fun finishCallback (): Boolean {
+    fun finishCallback(): Boolean {
         videoTitle.visibility = View.INVISIBLE
         return true
     }
