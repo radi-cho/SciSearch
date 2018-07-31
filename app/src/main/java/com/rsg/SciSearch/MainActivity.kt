@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        message.setOnClickListener(View.OnClickListener { v ->
+        message.setOnClickListener({ _ ->
             val intent = Intent(this, ArticleActivity::class.java)
             startActivityForResult(intent, 1)
         })
