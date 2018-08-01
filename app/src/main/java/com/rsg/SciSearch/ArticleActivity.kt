@@ -3,10 +3,11 @@ package com.rsg.SciSearch
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.activity_article.*
 import com.rsg.SciSearch.YouTube.ThumbnailLayout
 import com.rsg.SciSearch.YouTube.VideoInterface
-import com.rsg.SciSearch.YouTube.YouTube
+import com.rsg.SciSearch.YouTube.YouTubeContent
 
 
 class ArticleActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class ArticleActivity : AppCompatActivity() {
     }
 
     private fun clickCallback(video: String) {
-        val intent = Intent(this, YouTube::class.java)
+        val intent = Intent(this, YouTubeContent::class.java)
         intent.putExtra("VIDEO", video)
         startActivityForResult(intent, 1)
     }

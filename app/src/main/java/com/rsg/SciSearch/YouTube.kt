@@ -42,7 +42,7 @@ class VideoInterface {
     val title: String = "Radi Cho unboxing"
 }
 
-class YouTube : YouTubeBaseActivity() {
+class YouTubeContent : YouTubeBaseActivity() {
     companion object {
         const val YOUTUBE_API_KEY: String = "AIzaSyCOPi8Vq3IdlHPjwIKh5ZZsW22fCwkew0Q"
     }

@@ -24,7 +24,7 @@
             android:name=".ArticleActivity" />
             <!--android:theme="@style/AppTheme.NoActionBar" />-->
         <activity
-            android:name=".YouTube"
+            android:name=".YouTube.YouTubeContent"
             android:label="@string/title_activity_you_tube"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
