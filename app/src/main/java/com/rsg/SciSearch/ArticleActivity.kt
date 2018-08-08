@@ -3,7 +3,6 @@ package com.rsg.SciSearch
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.activity_article.*
 import com.rsg.SciSearch.YouTube.ThumbnailLayout
 import com.rsg.SciSearch.YouTube.VideoInterface
