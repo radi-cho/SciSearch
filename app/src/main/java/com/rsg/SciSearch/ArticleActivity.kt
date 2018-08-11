@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.rsg.SciSearch.YouTube.ThumbnailLayout
 import kotlinx.android.synthetic.main.activity_article.*
-import com.rsg.SciSearch.YouTube.VideoInterface
 import com.rsg.SciSearch.YouTube.YouTubeContent
 import kotlin.collections.HashMap
 
 
 class ArticleActivity : AppCompatActivity() {
-
-    val videos: Array<VideoInterface> = Array(2) { VideoInterface() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
@@ -31,23 +28,30 @@ class ArticleActivity : AppCompatActivity() {
                 .document(incomingDocumentId).get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val document = task.result
-                        val group: List<HashMap<String, String>> =
+                        val items: List<HashMap<String, String>> =
                                 document.get("items")
                                         as List<HashMap<String, String>>
 
-                        group.forEach({i ->
-                            val test = TextView(this)
-                            test.text = i.get("type")
-                            articleContent.addView(test)
+                        items.forEach({ i ->
+                            val type = i.get("type")
+                            if (type != null) {
+                                when (i.get("type")) {
+                                    "youtube" -> {
+                                        val thumb = ThumbnailLayout(this).createLayout(i)
+                                        thumb.setOnClickListener { clickCallback(i.get("videoId").toString()) }
+                                        articleContent.addView(thumb)
+                                    }
+
+                                    "text" -> {
+                                        val displayText = TextView(this)
+                                        displayText.text = i.get("text")
+                                        articleContent.addView(displayText)
+                                    }
+                                }
+                            }
                         })
                     }
                 }
-
-//        videos.forEach { video ->
-//            val option = ThumbnailLayout(this).createLayout(video)
-//            option.setOnClickListener { clickCallback(video.id) }
-//            articleContent.addView(option)
-//        }
 
         articleContent.invalidate()
     }

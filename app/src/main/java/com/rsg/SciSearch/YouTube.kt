@@ -34,7 +34,7 @@ class Sizes(private val context: Context) {
     val videoHeight: Int = (videoWidth / 1.8).roundToInt()
     val thumbWidth: Int = if (screen.x < screen.y) (screen.x / 1.1).roundToInt() else (screen.x / 1.15).roundToInt()
     val thumbHeight: Int = (thumbWidth / 1.775).roundToInt()
-    val thumbFontSize: Float = (thumbWidth / 10).toFloat()
+    val thumbFontSize: Float = (thumbWidth / 25).toFloat()
 }
 
 class VideoInterface {
@@ -91,7 +91,7 @@ class YouTubeContent : YouTubeBaseActivity() {
 
 class ThumbnailLayout(private val context: Context) {
     private val thumbText = TextView(context)
-    fun createLayout(video: VideoInterface): RelativeLayout {
+    fun createLayout(video: HashMap<String, String>): RelativeLayout {
         val sizes = Sizes(context)
 
         val relativeLayout = RelativeLayout(context)
@@ -108,20 +108,20 @@ class ThumbnailLayout(private val context: Context) {
         image.layoutParams = contentSizes
 
         image.background = ColorDrawable(Color.rgb(220, 220, 220))
-        loadRemoteThumbnail("https://img.youtube.com/vi/${video.id}/mqdefault.jpg", image)
+        loadRemoteThumbnail("https://img.youtube.com/vi/${video.get("videoId")}/mqdefault.jpg", image)
         image.id = R.id.thumbImage
         relativeLayout.addView(image)
 
         thumbText.layoutParams = contentSizes
         thumbText.gravity = Gravity.CENTER
-        thumbText.text = video.title
+        thumbText.text = video.get("title")
         thumbText.textSize = sizes.thumbFontSize
         relativeLayout.addView(thumbText)
         return relativeLayout
     }
 
     private fun finishCallback(): Boolean {
-        thumbText.visibility = View.INVISIBLE
+        thumbText.post({ thumbText.visibility = View.INVISIBLE})
         return true
     }
 
