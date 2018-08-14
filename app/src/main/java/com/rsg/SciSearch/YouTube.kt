@@ -2,45 +2,22 @@ package com.rsg.SciSearch.YouTube
 
 import android.content.Context
 import android.graphics.Color
-import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.*
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
-import com.rsg.SciSearch.R
 import kotlinx.android.synthetic.main.activity_youtube.*
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
-import kotlin.math.roundToInt
-
-class Sizes(private val context: Context) {
-    // get the screen size
-    val screen = Point().also {
-        (context.getSystemService(AppCompatActivity.WINDOW_SERVICE) as WindowManager)
-                .defaultDisplay
-                .apply { getSize(it) }
-    }
-
-    val videoWidth: Int = if (screen.x < screen.y) (screen.x / 1.15).roundToInt() else (screen.x / 1.2).roundToInt()
-    val videoHeight: Int = (videoWidth / 1.8).roundToInt()
-    val thumbWidth: Int = if (screen.x < screen.y) (screen.x / 1.1).roundToInt() else (screen.x / 1.15).roundToInt()
-    val thumbHeight: Int = (thumbWidth / 1.775).roundToInt()
-    val thumbFontSize: Float = (thumbWidth / 25).toFloat()
-}
-
-class VideoInterface {
-    val id: String = "H5cb55q4nMM"
-    val title: String = "Radi Cho unboxing"
-}
+import com.rsg.SciSearch.R
+import com.rsg.SciSearch.Utils.Sizes
 
 class YouTubeContent : YouTubeBaseActivity() {
     companion object {
@@ -95,12 +72,12 @@ class ThumbnailLayout(private val context: Context) {
         val sizes = Sizes(context)
 
         val relativeLayout = RelativeLayout(context)
-        val optionLayout: LinearLayout.LayoutParams = LinearLayout.LayoutParams(sizes.thumbWidth, sizes.thumbHeight)
+        val optionLayout: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, sizes.thumbHeight)
         optionLayout.setMargins(1, 3, 1, 3)
         relativeLayout.layoutParams = optionLayout
 
         val contentSizes: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-                sizes.thumbWidth,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 sizes.thumbHeight
         )
 
@@ -121,7 +98,7 @@ class ThumbnailLayout(private val context: Context) {
     }
 
     private fun finishCallback(): Boolean {
-        thumbText.post({ thumbText.visibility = View.INVISIBLE})
+        thumbText.post({ thumbText.visibility = View.INVISIBLE })
         return true
     }
 
