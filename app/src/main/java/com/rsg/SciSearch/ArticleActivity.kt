@@ -59,6 +59,10 @@ class ArticleActivity : AppCompatActivity() {
                                         val text = i["text"] as String
                                         UI.renderArticleText(text, articleContent, sizes)
                                     }
+
+                                    "topic" -> {
+                                        UI.renderTopicName(i["title"] as String, articleContent)
+                                    }
                                 }
                             }
                         })

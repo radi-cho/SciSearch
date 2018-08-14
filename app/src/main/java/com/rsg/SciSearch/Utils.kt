@@ -73,4 +73,15 @@ class UIElements(private val context: Context) {
         displayText.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizes.articleTextSize)
         layout.addView(displayText)
     }
+
+    fun renderTopicName (text: String, layout: LinearLayout) {
+        val displayText = TextView(context)
+        displayText.text = text
+        displayText.gravity = Gravity.LEFT
+        displayText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25f)
+        layout.addView(displayText)
+
+        // add horizontal line below the sub-title
+        renderHorizotalLine(2.dpToPx(), layout)
+    }
 }
