@@ -39,7 +39,7 @@ class Sizes(private val context: Context) {
     val layoutWidth: Int = if (screen.x < screen.y) (screen.x / 1.1).roundToInt() else (screen.x / 1.15).roundToInt()
 
     // text sizes
-    val articleTextSize: Float = 21f
+    val articleTextSize: Float = 18f
 
     // media sizes
     val videoWidth: Int = if (screen.x < screen.y) (screen.x / 1.05).roundToInt() else (screen.x / 1.1).roundToInt()
@@ -66,7 +66,7 @@ class UIElements(private val context: Context) {
         val displayText = TextView(context)
         displayText.text = text
         displayText.setTextColor(Color.BLACK)
-        displayText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+        displayText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
         displayText.gravity = Gravity.CENTER_HORIZONTAL
 
         val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
