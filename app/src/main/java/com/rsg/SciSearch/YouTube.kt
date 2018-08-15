@@ -1,21 +1,13 @@
 package com.rsg.SciSearch.YouTube
 
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.widget.*
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_youtube.*
-import java.io.IOException
-import java.io.InputStream
-import java.net.URL
 import com.rsg.SciSearch.R
 import com.rsg.SciSearch.Utils.Sizes
 
@@ -64,54 +56,4 @@ class YouTubeContent : YouTubeBaseActivity() {
         missingMessage.gravity = Gravity.CENTER_HORIZONTAL
         youtubeSource.addView(missingMessage)
     }
-}
-
-class ThumbnailLayout(private val context: Context) {
-    private val thumbText = TextView(context)
-    fun createLayout(video: HashMap<String, String>): RelativeLayout {
-        val sizes = Sizes(context)
-
-        val relativeLayout = RelativeLayout(context)
-        val optionLayout: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, sizes.thumbHeight)
-        optionLayout.setMargins(1, 3, 1, 3)
-        relativeLayout.layoutParams = optionLayout
-
-        val contentSizes: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                sizes.thumbHeight
-        )
-
-        val image = ImageView(context)
-        image.layoutParams = contentSizes
-
-        image.background = ColorDrawable(Color.rgb(220, 220, 220))
-        loadRemoteThumbnail("https://img.youtube.com/vi/${video.get("videoId")}/mqdefault.jpg", image)
-        image.id = R.id.thumbImage
-        relativeLayout.addView(image)
-
-        thumbText.layoutParams = contentSizes
-        thumbText.gravity = Gravity.CENTER
-        thumbText.text = video.get("title")
-        thumbText.textSize = sizes.thumbFontSize
-        relativeLayout.addView(thumbText)
-        return relativeLayout
-    }
-
-    private fun finishCallback(): Boolean {
-        thumbText.post({ thumbText.visibility = View.INVISIBLE })
-        return true
-    }
-
-    private fun loadRemoteThumbnail(url: String, imageView: ImageView) {
-        Thread(Runnable {
-            try {
-                val drawable = Drawable.createFromStream(URL(url).content as InputStream, "src")
-                imageView.post({ imageView.setImageDrawable(drawable) })
-                finishCallback()
-            } catch (e: IOException) {
-                // TODO: Add Firebase/Fabric Crashlytics solution here
-            }
-        }).start()
-    }
-
 }
