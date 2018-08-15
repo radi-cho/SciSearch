@@ -1,8 +1,12 @@
 package com.rsg.SciSearch
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_article.*
 import kotlin.collections.HashMap
@@ -49,8 +53,21 @@ class ArticleActivity : AppCompatActivity() {
                             if (type != null) {
                                 when (type) {
                                     "youtube" -> {
-                                        val thumb = ThumbnailLayout(this).createLayout(i)
+                                        val thumb = RemoteImageLoader(this).createLayout(
+                                                "https://img.youtube.com/vi/${i["videoId"]}/mqdefault.jpg",
+                                                i["title"] as String
+                                        )
+
+                                        val playerIcon: ImageView = LocalImageLoader(this).getImageView(
+                                                ResourcesCompat.getDrawable(resources, R.drawable.ic_play_arrow, null) as Drawable
+                                        )
+
+                                        val params = RelativeLayout.LayoutParams(sizes.playIconSize, sizes.playIconSize)
+                                        params.addRule(RelativeLayout.CENTER_IN_PARENT)
+                                        playerIcon.layoutParams = params
+
                                         thumb.setOnClickListener { clickCallback(i["videoId"].toString()) }
+                                        thumb.addView(playerIcon)
                                         articleContent.addView(thumb)
                                     }
 
@@ -61,6 +78,14 @@ class ArticleActivity : AppCompatActivity() {
 
                                     "topic" -> {
                                         UI.renderTopicName(i["title"] as String, articleContent)
+                                    }
+
+                                    "image" -> {
+                                        val img = RemoteImageLoader(this).createLayout(
+                                                i["url"] as String,
+                                                i["alt"] as String
+                                        )
+                                        articleContent.addView(img)
                                     }
                                 }
                             }

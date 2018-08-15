@@ -41,11 +41,13 @@ class Sizes(private val context: Context) {
     // text sizes
     val articleTextSize: Float = 21f
 
-    // youtube media sizes
+    // media sizes
     val videoWidth: Int = if (screen.x < screen.y) (screen.x / 1.05).roundToInt() else (screen.x / 1.1).roundToInt()
     val videoHeight: Int = (videoWidth / 1.8).roundToInt()
     val thumbHeight: Int = (layoutWidth / 1.775).roundToInt()
     val thumbFontSize: Float = 35f
+
+    val playIconSize: Int = layoutWidth / 5
 }
 
 class UIElements(private val context: Context) {
