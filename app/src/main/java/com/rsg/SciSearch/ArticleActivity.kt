@@ -41,7 +41,6 @@ class ArticleActivity : AppCompatActivity() {
 
                         updateActionBar(document["title"] as String)
                         UI.renderDescription(document["description"] as String, articleContent)
-                        UI.renderHorizotalLine(2.dpToPx(), articleContent)
                         UI.renderArticleText(document["intro"] as String, articleContent, sizes)
 
                         val items = document.get("items") as List<HashMap<String, String>>

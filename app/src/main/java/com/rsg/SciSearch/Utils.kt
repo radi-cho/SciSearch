@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Point
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.LinearLayout.LayoutParams
@@ -47,23 +49,30 @@ class Sizes(private val context: Context) {
 }
 
 class UIElements(private val context: Context) {
-    fun renderHorizotalLine(height: Int, layout: LinearLayout) {
+    fun renderHorizotalLine(layout: LinearLayout) {
         val hr = View(context)
 
-        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1.dpToPx())
         params.setMargins(0, 3.dpToPx(), 0, 2.dpToPx())
         hr.layoutParams = params
 
-        hr.background = ColorDrawable(Color.rgb(220, 220, 220))
+        hr.background = ColorDrawable(Color.GRAY)
         layout.addView(hr)
     }
 
     fun renderDescription (text: String, layout: LinearLayout) {
         val displayText = TextView(context)
         displayText.text = text
-        displayText.gravity = Gravity.CENTER_HORIZONTAL
+        displayText.setTextColor(Color.BLACK)
         displayText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
+        displayText.gravity = Gravity.CENTER_HORIZONTAL
+
+        val params = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        params.setMargins(0, 0, 0, 3.dpToPx())
+        displayText.layoutParams = params
+
         layout.addView(displayText)
+        renderHorizotalLine(layout)
     }
 
     fun renderArticleText (text: String, layout: LinearLayout, sizes: Sizes) {
@@ -75,13 +84,17 @@ class UIElements(private val context: Context) {
     }
 
     fun renderTopicName (text: String, layout: LinearLayout) {
-        val displayText = TextView(context)
-        displayText.text = text
-        displayText.gravity = Gravity.LEFT
-        displayText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25f)
-        layout.addView(displayText)
+        val textView = TextView(context)
+        val textContent = SpannableString(text)
+        textContent.setSpan(StyleSpan(Typeface.ITALIC), 0, textContent.length, 0)
+
+        textView.text = textContent
+        textView.setTextColor(Color.BLACK)
+        textView.gravity = Gravity.LEFT
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
+        layout.addView(textView)
 
         // add horizontal line below the sub-title
-        renderHorizotalLine(2.dpToPx(), layout)
+        renderHorizotalLine(layout)
     }
 }
