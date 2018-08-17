@@ -10,8 +10,12 @@ import com.google.android.youtube.player.YouTubePlayerView
 import kotlinx.android.synthetic.main.activity_youtube.*
 import com.rsg.SciSearch.R
 import com.rsg.SciSearch.Utils.Sizes
+import com.rsg.SciSearch.Utils.dpToPx
+import io.fabric.sdk.android.services.settings.IconRequest.build
 
-class YouTubeContent : YouTubeBaseActivity() {
+
+
+class YouTubeContent: YouTubeBaseActivity() {
     companion object {
         const val YOUTUBE_API_KEY: String = "AIzaSyCOPi8Vq3IdlHPjwIKh5ZZsW22fCwkew0Q"
     }
@@ -42,11 +46,14 @@ class YouTubeContent : YouTubeBaseActivity() {
         }
 
         val player = YouTubePlayerView(this)
-        player.layoutParams = LinearLayout.LayoutParams(sizes.videoWidth, sizes.videoHeight)
-        player.initialize(YOUTUBE_API_KEY, getYoutubePlayerInit(incomingVideoId))
-        youtubeSource.addView(player)
+        val playerParams = LinearLayout.LayoutParams(sizes.videoWidth, sizes.videoHeight)
+        playerParams.setMargins(0, 8.dpToPx(), 0, 0)
+        player.layoutParams = playerParams
 
-        youtubeSource.invalidate()
+        player.initialize(YOUTUBE_API_KEY, getYoutubePlayerInit(incomingVideoId))
+        playerLayout.addView(player)
+
+        playerLayout.invalidate()
     }
 
     private fun addMissingMessage() {
@@ -54,6 +61,6 @@ class YouTubeContent : YouTubeBaseActivity() {
         missingMessage.text = "The video cannot be loaded right now."
         missingMessage.textSize = 20.toFloat()
         missingMessage.gravity = Gravity.CENTER_HORIZONTAL
-        youtubeSource.addView(missingMessage)
+        playerLayout.addView(missingMessage)
     }
 }

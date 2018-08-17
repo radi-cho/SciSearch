@@ -11,9 +11,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_article.*
 import kotlin.collections.HashMap
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.rsg.SciSearch.YouTube.YouTubeContent
 import com.rsg.SciSearch.ImageLoader.*
 import com.rsg.SciSearch.Utils.*
+import com.rsg.SciSearch.YouTube.YouTubeContent
 
 class ArticleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
