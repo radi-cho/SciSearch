@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,7 +37,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ArticleActivity::class.java)
             startActivityForResult(intent, 1)
         })
+
         getArticles()
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713")
     }
 
     fun getArticles() {
