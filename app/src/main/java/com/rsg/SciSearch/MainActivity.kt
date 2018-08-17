@@ -49,7 +49,17 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (document in task.result) {
                             val intent = Intent(this, ArticleActivity::class.java)
-                            intent.putExtra("docId", document.id)
+
+                            val docProps = HashMap<String, String>()
+                            val docItems = HashMap<String, List<HashMap<String, String>>>()
+
+                            docProps["title"] = document["title"] as String
+                            docProps["description"] = document["description"] as String
+                            docProps["intro"] = document["intro"] as String
+                            docItems["items"] = document["items"] as List<HashMap<String, String>>
+
+                            intent.putExtra("docItems", docItems)
+                            intent.putExtra("docProps", docProps)
                             startActivityForResult(intent, 1)
                         }
                     }

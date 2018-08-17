@@ -7,10 +7,8 @@ import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.RelativeLayout
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_article.*
 import kotlin.collections.HashMap
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.rsg.SciSearch.ImageLoader.*
 import com.rsg.SciSearch.Utils.*
 import com.rsg.SciSearch.YouTube.YouTubeContent
@@ -26,72 +24,62 @@ class ArticleActivity : AppCompatActivity() {
         articleContent.layoutParams.width = sizes.layoutWidth
         updateActionBar("Loading...")
 
-        val incomingDocumentId: String
-        if (intent.hasExtra("docId")) {
-            incomingDocumentId = intent.extras.getString("docId")
+        val documentProps: HashMap<String, String>
+        val documentItems: HashMap<String, List<HashMap<String, String>>>
+        if (intent.hasExtra("docProps") && intent.hasExtra("docItems")) {
+            documentProps = intent.extras.getSerializable("docProps") as HashMap<String, String>
+            documentItems = intent.extras.getSerializable("docItems") as HashMap<String, List<HashMap<String, String>>>
         } else {
             return
         }
 
-        val db = FirebaseFirestore.getInstance()
-        val settings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build()
-        db.firestoreSettings = settings
-        db.collection("articles")
-                .document(incomingDocumentId).get().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val document = task.result
+        updateActionBar(documentProps["title"] as String)
+        UI.renderDescription(documentProps["description"] as String, articleContent)
+        UI.renderArticleText(documentProps["intro"] as String, articleContent, sizes)
 
-                        updateActionBar(document["title"] as String)
-                        UI.renderDescription(document["description"] as String, articleContent)
-                        UI.renderArticleText(document["intro"] as String, articleContent, sizes)
+        val items = documentItems["items"] as ArrayList<HashMap<String, String>>
+        items.forEach({ i ->
+            val type = i["type"]
+            if (type != null) {
+                when (type) {
+                    "youtube" -> {
+                        val thumb = RemoteImageLoader(this).createLayout(
+                                "https://img.youtube.com/vi/${i["videoId"]}/mqdefault.jpg",
+                                i["title"] as String
+                        )
 
-                        val items = document.get("items") as List<HashMap<String, String>>
-                        items.forEach({ i ->
-                            val type = i["type"]
-                            if (type != null) {
-                                when (type) {
-                                    "youtube" -> {
-                                        val thumb = RemoteImageLoader(this).createLayout(
-                                                "https://img.youtube.com/vi/${i["videoId"]}/mqdefault.jpg",
-                                                i["title"] as String
-                                        )
+                        val playerIcon: ImageView = LocalImageLoader(this).getImageView(
+                                ResourcesCompat.getDrawable(resources, R.drawable.ic_play_arrow, null) as Drawable
+                        )
 
-                                        val playerIcon: ImageView = LocalImageLoader(this).getImageView(
-                                                ResourcesCompat.getDrawable(resources, R.drawable.ic_play_arrow, null) as Drawable
-                                        )
+                        val params = RelativeLayout.LayoutParams(sizes.playIconSize, sizes.playIconSize)
+                        params.addRule(RelativeLayout.CENTER_IN_PARENT)
+                        playerIcon.layoutParams = params
 
-                                        val params = RelativeLayout.LayoutParams(sizes.playIconSize, sizes.playIconSize)
-                                        params.addRule(RelativeLayout.CENTER_IN_PARENT)
-                                        playerIcon.layoutParams = params
+                        thumb.setOnClickListener { clickCallback(i["videoId"].toString()) }
+                        thumb.addView(playerIcon)
+                        articleContent.addView(thumb)
+                    }
 
-                                        thumb.setOnClickListener { clickCallback(i["videoId"].toString()) }
-                                        thumb.addView(playerIcon)
-                                        articleContent.addView(thumb)
-                                    }
+                    "text" -> {
+                        val text = i["text"] as String
+                        UI.renderArticleText(text, articleContent, sizes)
+                    }
 
-                                    "text" -> {
-                                        val text = i["text"] as String
-                                        UI.renderArticleText(text, articleContent, sizes)
-                                    }
+                    "topic" -> {
+                        UI.renderTopicName(i["title"] as String, articleContent)
+                    }
 
-                                    "topic" -> {
-                                        UI.renderTopicName(i["title"] as String, articleContent)
-                                    }
-
-                                    "image" -> {
-                                        val img = RemoteImageLoader(this).createLayout(
-                                                i["url"] as String,
-                                                i["alt"] as String
-                                        )
-                                        articleContent.addView(img)
-                                    }
-                                }
-                            }
-                        })
+                    "image" -> {
+                        val img = RemoteImageLoader(this).createLayout(
+                                i["url"] as String,
+                                i["alt"] as String
+                        )
+                        articleContent.addView(img)
                     }
                 }
+            }
+        })
 
         articleContent.invalidate()
     }
