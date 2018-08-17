@@ -11,11 +11,13 @@ import kotlinx.android.synthetic.main.activity_youtube.*
 import com.rsg.SciSearch.R
 import com.rsg.SciSearch.Utils.Sizes
 import com.rsg.SciSearch.Utils.dpToPx
-import io.fabric.sdk.android.services.settings.IconRequest.build
+import com.google.android.youtube.player.YouTubePlayer.PlaybackEventListener
 
 
 
 class YouTubeContent: YouTubeBaseActivity() {
+    lateinit var player: YouTubePlayer
+
     companion object {
         const val YOUTUBE_API_KEY: String = "AIzaSyCOPi8Vq3IdlHPjwIKh5ZZsW22fCwkew0Q"
     }
@@ -23,7 +25,8 @@ class YouTubeContent: YouTubeBaseActivity() {
     private fun getYoutubePlayerInit(videoId: String): YouTubePlayer.OnInitializedListener {
         return object : YouTubePlayer.OnInitializedListener {
             override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youTubePlayer: YouTubePlayer, p2: Boolean) {
-                youTubePlayer.cueVideo(videoId)
+                player = youTubePlayer
+                player.cueVideo(videoId)
             }
 
             override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
@@ -45,15 +48,27 @@ class YouTubeContent: YouTubeBaseActivity() {
             return
         }
 
-        val player = YouTubePlayerView(this)
+        val playerView = YouTubePlayerView(this)
         val playerParams = LinearLayout.LayoutParams(sizes.videoWidth, sizes.videoHeight)
-        playerParams.setMargins(0, 8.dpToPx(), 0, 0)
-        player.layoutParams = playerParams
+        playerParams.setMargins(0, 8.dpToPx(),
+                0, 0)
+        playerView.layoutParams = playerParams
 
-        player.initialize(YOUTUBE_API_KEY, getYoutubePlayerInit(incomingVideoId))
-        playerLayout.addView(player)
+        playerView.initialize(YOUTUBE_API_KEY, getYoutubePlayerInit(incomingVideoId))
+        playerLayout.addView(playerView)
 
         playerLayout.invalidate()
+
+        seekVid.setOnClickListener {
+            val ms = 20000
+            // TODO: Use this method to seek the video to a quote
+            if (player.isPlaying) {
+               player.seekToMillis(ms)
+            } else {
+                player.cueVideo(incomingVideoId, ms)
+                player.play()
+            }
+        }
     }
 
     private fun addMissingMessage() {
