@@ -50,16 +50,12 @@ class MainActivity : AppCompatActivity() {
                         for (document in task.result) {
                             val intent = Intent(this, ArticleActivity::class.java)
 
-                            val docProps = HashMap<String, String>()
-                            val docItems = HashMap<String, List<HashMap<String, String>>>()
+                            val doc = HashMap<String, Any>()
+                            doc["title"] = document["title"] as String
+                            doc["description"] = document["description"] as String
+                            doc["items"] = document["items"] as ArrayList<HashMap<String, String>>
 
-                            docProps["title"] = document["title"] as String
-                            docProps["description"] = document["description"] as String
-                            docProps["intro"] = document["intro"] as String
-                            docItems["items"] = document["items"] as List<HashMap<String, String>>
-
-                            intent.putExtra("docItems", docItems)
-                            intent.putExtra("docProps", docProps)
+                            intent.putExtra("document", doc)
                             startActivityForResult(intent, 1)
                         }
                     }

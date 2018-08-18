@@ -24,20 +24,17 @@ class ArticleActivity : AppCompatActivity() {
         articleContent.layoutParams.width = sizes.layoutWidth
         updateActionBar("Loading...")
 
-        val documentProps: HashMap<String, String>
-        val documentItems: HashMap<String, List<HashMap<String, String>>>
-        if (intent.hasExtra("docProps") && intent.hasExtra("docItems")) {
-            documentProps = intent.extras.getSerializable("docProps") as HashMap<String, String>
-            documentItems = intent.extras.getSerializable("docItems") as HashMap<String, List<HashMap<String, String>>>
+        val document: HashMap<String, Any>
+        if (intent.hasExtra("document")) {
+            document = intent.extras.getSerializable("document") as HashMap<String, Any>
         } else {
             return
         }
 
-        updateActionBar(documentProps["title"] as String)
-        UI.renderDescription(documentProps["description"] as String, articleContent)
-        UI.renderArticleText(documentProps["intro"] as String, articleContent, sizes)
+        updateActionBar(document["title"] as String)
+        UI.renderDescription(document["description"] as String, articleContent)
 
-        val items = documentItems["items"] as ArrayList<HashMap<String, String>>
+        val items = document["items"] as ArrayList<HashMap<String, String>>
         items.forEach({ i ->
             val type = i["type"]
             if (type != null) {
