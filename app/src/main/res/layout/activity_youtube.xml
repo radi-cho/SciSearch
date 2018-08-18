@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:id="@+id/youtubeActivity"
+    android:id="@+id/youtubeActivityLayout"
     tools:context=".YouTube.YouTubeContent">
 
     <LinearLayout
@@ -13,11 +13,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/playerLayout" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Seek (this will be used to seek quotes)"
-        android:id="@+id/seekVid"/>
 
 </LinearLayout>

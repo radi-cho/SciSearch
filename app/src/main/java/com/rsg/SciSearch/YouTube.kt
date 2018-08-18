@@ -2,6 +2,7 @@ package com.rsg.SciSearch.YouTube
 
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.*
 import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.android.youtube.player.YouTubeInitializationResult
@@ -11,12 +12,10 @@ import kotlinx.android.synthetic.main.activity_youtube.*
 import com.rsg.SciSearch.R
 import com.rsg.SciSearch.Utils.Sizes
 import com.rsg.SciSearch.Utils.dpToPx
-import com.google.android.youtube.player.YouTubePlayer.PlaybackEventListener
-
-
 
 class YouTubeContent: YouTubeBaseActivity() {
     lateinit var player: YouTubePlayer
+    lateinit var incomingVideoId: String
 
     companion object {
         const val YOUTUBE_API_KEY: String = "AIzaSyCOPi8Vq3IdlHPjwIKh5ZZsW22fCwkew0Q"
@@ -40,9 +39,8 @@ class YouTubeContent: YouTubeBaseActivity() {
         setContentView(R.layout.activity_youtube)
 
         val sizes = Sizes(this)
-        val incomingVideoId: String
-        if (intent.hasExtra("VIDEO")) {
-            incomingVideoId = intent.extras.getString("VIDEO")
+        if (intent.hasExtra("id")) {
+            incomingVideoId = intent.extras.getString("id")
         } else {
             addMissingMessage()
             return
@@ -50,8 +48,7 @@ class YouTubeContent: YouTubeBaseActivity() {
 
         val playerView = YouTubePlayerView(this)
         val playerParams = LinearLayout.LayoutParams(sizes.videoWidth, sizes.videoHeight)
-        playerParams.setMargins(0, 8.dpToPx(),
-                0, 0)
+        playerParams.setMargins(0, 8.dpToPx(), 0, 5.dpToPx())
         playerView.layoutParams = playerParams
 
         playerView.initialize(YOUTUBE_API_KEY, getYoutubePlayerInit(incomingVideoId))
@@ -59,15 +56,20 @@ class YouTubeContent: YouTubeBaseActivity() {
 
         playerLayout.invalidate()
 
-        seekVid.setOnClickListener {
-            val ms = 20000
-            // TODO: Use this method to seek the video to a quote
-            if (player.isPlaying) {
-               player.seekToMillis(ms)
-            } else {
-                player.cueVideo(incomingVideoId, ms)
-                player.play()
+        if (intent.hasExtra("quotes")) {
+            val quotesSerializable = intent.getSerializableExtra("quotes") as HashMap<String, List<HashMap<String, Any>>>
+            val quotesList = quotesSerializable["items"] as List<HashMap<String, Any>>
+
+            // Render the quotes
+            quotesList.forEach {
+                val quoteButton = Button(this)
+                quoteButton.text = it["text"] as String
+                setQuoteClickListener(quoteButton, it["time"] as Long)
+                youtubeActivityLayout.addView(quoteButton)
             }
+        } else {
+            addMissingMessage()
+            return
         }
     }
 
@@ -77,5 +79,17 @@ class YouTubeContent: YouTubeBaseActivity() {
         missingMessage.textSize = 20.toFloat()
         missingMessage.gravity = Gravity.CENTER_HORIZONTAL
         playerLayout.addView(missingMessage)
+    }
+
+    private fun setQuoteClickListener (quote: View, seekTime: Long) {
+        val ms = seekTime.toInt()
+        quote.setOnClickListener {
+            if (player.isPlaying) {
+                player.seekToMillis(ms)
+            } else {
+                player.cueVideo(incomingVideoId, ms)
+                player.play()
+            }
+        }
     }
 }

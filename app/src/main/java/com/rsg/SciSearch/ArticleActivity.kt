@@ -56,7 +56,9 @@ class ArticleActivity : AppCompatActivity() {
                         params.addRule(RelativeLayout.CENTER_IN_PARENT)
                         playerIcon.layoutParams = params
 
-                        thumb.setOnClickListener { clickCallback(i["videoId"].toString()) }
+                        thumb.setOnClickListener {
+                            clickCallback(i as HashMap<String, Any>)
+                        }
                         thumb.addView(playerIcon)
                         articleContent.addView(thumb)
                     }
@@ -84,9 +86,16 @@ class ArticleActivity : AppCompatActivity() {
         articleContent.invalidate()
     }
 
-    private fun clickCallback(video: String) {
+    private fun clickCallback(video: HashMap<String, Any>) {
         val intent = Intent(this, YouTubeContent::class.java)
-        intent.putExtra("VIDEO", video)
+        intent.putExtra("title", video["title"] as String)
+        intent.putExtra("text", video["text"] as String)
+        intent.putExtra("id", video["videoId"] as String)
+
+        val quotes = HashMap<String, List<HashMap<String, String>>>()
+        quotes["items"] = video["quotes"] as List<HashMap<String, String>>
+        intent.putExtra("quotes", quotes)
+
         startActivityForResult(intent, 1)
     }
 
