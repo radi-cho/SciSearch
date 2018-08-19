@@ -96,7 +96,7 @@ class ArticleActivity : AppCompatActivity() {
         startActivityForResult(intent, 1)
     }
 
-    fun updateActionBar(title: String) {
+    private fun updateActionBar(title: String) {
         val actionBar = supportActionBar
         actionBar!!.setDisplayHomeAsUpEnabled(false)
         actionBar.title = title

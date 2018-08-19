@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.widget.TextView
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -42,21 +44,27 @@ class MainActivity : AppCompatActivity() {
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713")
     }
 
-    fun getArticles() {
+    private fun getArticles() {
         val db = FirebaseFirestore.getInstance()
         db.collection("articles")
+                .orderBy("publishedAt", Query.Direction.DESCENDING)
+                .limit(25)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result) {
-                            val intent = Intent(this, ArticleActivity::class.java)
+                            val text = TextView(this)
+                            text.text = document["title"] as String
+                            text.setOnClickListener {
+                                val intent = Intent(this, ArticleActivity::class.java)
+                                val doc = HashMap<String, Any>()
+                                doc["title"] = document["title"] as String
+                                doc["description"] = document["description"] as String
+                                doc["items"] = document["items"] as ArrayList<HashMap<String, String>>
 
-                            val doc = HashMap<String, Any>()
-                            doc["title"] = document["title"] as String
-                            doc["description"] = document["description"] as String
-                            doc["items"] = document["items"] as ArrayList<HashMap<String, String>>
-
-                            intent.putExtra("document", doc)
-                            startActivityForResult(intent, 1)
+                                intent.putExtra("document", doc)
+                                startActivityForResult(intent, 1)
+                            }
+                            content.addView(text)
                         }
                     }
                 }
