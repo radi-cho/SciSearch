@@ -56,6 +56,7 @@ class ArticleActivity : AppCompatActivity() {
                         thumb.setOnClickListener {
                             clickCallback(i as HashMap<String, Any>)
                         }
+
                         thumb.addView(playerIcon)
                         articleContent.addView(thumb)
                     }
