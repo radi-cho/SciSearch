@@ -16,11 +16,11 @@ import com.algolia.instantsearch.helpers.Searcher
 class MainActivity : AppCompatActivity() {
     private var category: String = "recent"
 
-    private val ALGOLIA_APP_ID = "MUSLDUOA83"
-    private val ALGOLIA_SEARCH_API_KEY = "f41b7c5869a73585c869c563beffff16"
-    private val ALGOLIA_INDEX_NAME = "articles"
+    private val algoliaAppId = "MUSLDUOA83"
+    private val algoliaSearchKey = "f41b7c5869a73585c869c563beffff16"
+    private val algoliaIndex = "articles"
 
-    lateinit var searcher: Searcher
+    private lateinit var searcher: Searcher
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         content.removeAllViews()
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                     val myLayout = inflater.inflate(R.layout.search_layout, content, false)
                     content.addView(myLayout)
 
-                    searcher = Searcher.create(ALGOLIA_APP_ID, ALGOLIA_SEARCH_API_KEY, ALGOLIA_INDEX_NAME)
+                    searcher = Searcher.create(algoliaAppId, algoliaSearchKey, algoliaIndex)
                     val helper = InstantSearch(this, searcher)
                     helper.search()
                 }
@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                             doc["items"] = document["items"] as ArrayList<HashMap<String, String>>
 
                             intent.putExtra("document", doc)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                             startActivityForResult(intent, 1)
 
                         }

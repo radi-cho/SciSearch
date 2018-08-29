@@ -11,10 +11,5 @@
             android:layout_height="wrap_content"
             algolia:attribute='@{"title"}'/>
 
-        <!--<TextView-->
-            <!--android:id="@+id/product_price"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--algolia:attribute='@{"salePrice"}'/>-->
     </LinearLayout>
 </layout>

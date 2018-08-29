@@ -92,7 +92,7 @@ class UIElements(private val context: Context) {
 
         textView.text = textContent
         textView.setTextColor(Color.BLACK)
-        textView.gravity = Gravity.LEFT
+        textView.gravity = Gravity.START
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
         layout.addView(textView)
 

@@ -15,7 +15,7 @@ import com.rsg.SciSearch.Utils.dpToPx
 
 class YouTubeContent: YouTubeBaseActivity() {
     lateinit var player: YouTubePlayer
-    lateinit var incomingVideoId: String
+    private lateinit var incomingVideoId: String
 
     companion object {
         const val YOUTUBE_API_KEY: String = "AIzaSyCOPi8Vq3IdlHPjwIKh5ZZsW22fCwkew0Q"
