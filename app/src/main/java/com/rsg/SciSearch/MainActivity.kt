@@ -9,9 +9,19 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
+import com.algolia.instantsearch.helpers.InstantSearch
+import com.algolia.instantsearch.helpers.Searcher
+
 
 class MainActivity : AppCompatActivity() {
     private var category: String = "recent"
+
+    private val ALGOLIA_APP_ID = "MUSLDUOA83"
+    private val ALGOLIA_SEARCH_API_KEY = "f41b7c5869a73585c869c563beffff16"
+    private val ALGOLIA_INDEX_NAME = "articles"
+
+    lateinit var searcher: Searcher
+
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         content.removeAllViews()
         renderLoading()
@@ -24,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 return@OnNavigationItemSelectedListener true
             }
+
             R.id.navigation_dashboard -> {
                 if (category != "keywords") {
                     category = "keywords"
@@ -31,10 +42,19 @@ class MainActivity : AppCompatActivity() {
                 }
                 return@OnNavigationItemSelectedListener true
             }
+
             R.id.navigation_notifications -> {
-                if (category != "something") {
-                    category = "something"
-                    getArticles()
+                if (category != "search") {
+                    category = "search"
+                    content.removeAllViews()
+
+                    val inflater = layoutInflater
+                    val myLayout = inflater.inflate(R.layout.search_layout, content, false)
+                    content.addView(myLayout)
+
+                    searcher = Searcher.create(ALGOLIA_APP_ID, ALGOLIA_SEARCH_API_KEY, ALGOLIA_INDEX_NAME)
+                    val helper = InstantSearch(this, searcher)
+                    helper.search()
                 }
                 return@OnNavigationItemSelectedListener true
             }
@@ -52,6 +72,12 @@ class MainActivity : AppCompatActivity() {
         renderLoading()
         getArticles()
     }
+
+    override fun onDestroy() {
+        searcher.destroy()
+        super.onDestroy()
+    }
+
 
     private fun getQuery(): Query {
         val db = FirebaseFirestore.getInstance()
